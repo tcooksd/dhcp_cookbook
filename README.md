@@ -26,10 +26,10 @@ Attributes
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['dhcp_mod']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
+    <td><tt>['server']['hosts']</tt></td>
+    <td>Hash</td>
+    <td>hostname mac ip_address perm_ip_address</td>
+    <td><tt>false</tt></td>
   </tr>
 </table>
 
