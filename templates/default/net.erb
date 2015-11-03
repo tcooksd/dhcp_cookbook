@@ -1,0 +1,102 @@
+ # Firewall configuration
+firewall --disabled
+install
+url --url="http://10.177.95.12/pxe/centos/7/repo/"
+rootpw --iscrypted $1$mOX/C5TD$JkBqu.LMJzJ79uKKHrRva.
+# System authorization information
+auth  useshadow  passalgo=sha512
+# Use graphical install
+#graphical
+text
+firstboot enable
+ignoredisk --only-use=sda
+# System keyboard
+keyboard --vckeymap=us --xlayouts='us'
+# System language
+lang en_US.UTF-8
+network --device enp6s0  --bootproto static --ip <%= @host_ip_address %> --netmask 255.255.255.0 --gateway 10.177.3.1 --nameserver 10.176.10.176  --onboot=on --ipv6=auto
+network  --bootproto=dhcp --device=enp7s0 --onboot=on --ipv6=auto
+network  --hostname=<%= @host_to_add  %>.hfs.hightail.com
+reboot
+# SELinux configuration
+selinux disabled
+# Installation logging level
+logging level=info
+# System timezone
+timezone America/Los_Angeles --isUtc --nontp
+# System bootloader configuration
+bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=sda
+clearpart --all --initlabel --drives=sda
+part /boot --fstype="ext4" --ondisk=sda --size=500
+part / --fstype="ext4" --ondisk=sda --grow  --size=1024
+
+user --name=josef --homedir=/home/josef --password=usendit2hightail
+
+%packages
+@compat-libraries
+@core
+vim-enhanced 
+wget
+net-tools
+chrony 
+git 
+tcpdump
+ntp 
+ntpdate
+iptables-services
+qemu-kvm 
+libvirt 
+libvirt-python 
+libguestfs-tools 
+virt-install
+%end
+
+%post --log=/root/ks-post.log 
+
+
+cat << EOF > /etc/default/grub 
+GRUB_TIMEOUT=5 
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="pv6.disable=1 net.ifnames=0 biosdevname=0 crashkernel=auto net.ifnames=0 rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"
+EOF
+
+mv /etc/sysconfig/network-scripts/ifcfg-enp6s0 /etc/sysconfig/network-scripts/ifcfg-eth0
+mv /etc/sysconfig/network-scripts/ifcfg-enp7s0 /etc/sysconfig/network-scripts/ifcfg-eth1
+perl -pi -e 's/enp6s0/eth0/g' /etc/sysconfig/network-scripts/ifcfg-eth0
+perl -pi -e 's/enp7s0/eth1/g' /etc/sysconfig/network-scripts/ifcfg-eth1
+
+grub2-mkconfig -o /boot/grub2/grub.cfg 
+
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1 
+DEVICE="eth1"
+BOOTPROTO="none"
+IPV6INIT="no"
+NM_CONTROLLED="no"
+ONBOOT="yes"
+TYPE="Ethernet"
+EOF
+
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth2 
+DEVICE="eth2"
+BOOTPROTO="none"
+IPV6INIT="no"
+NM_CONTROLLED="no"
+ONBOOT="yes"
+TYPE="Ethernet"
+EOF
+
+yum -y update
+yum install epel-release -y
+
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl enable iptables
+systemctl start iptables
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+systemctl enable network
+
+%end

@@ -1,0 +1,5 @@
+
+
+default['server']['hosts'] = { 
+  'hostname' =>  'kvm02', 'mac' => '00:25:B5:02:B0:0A', 'ip_address' => '10.177.75.63',
+  'hostname' =>  'kvm01', 'mac' => '00:25:B5:02:B0:09', 'ip_address' => '10.177.75.62'}

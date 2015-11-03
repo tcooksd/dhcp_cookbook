@@ -1,0 +1,11 @@
+default menu.c32
+ prompt 0
+ timeout 10
+ MENU TITLE Hightail UCS PXE Menu
+
+ LABEL centos7_<%= @host_to_add  %>
+ MENU LABEL CentOS 7 X64 <%= @host_to_add  %>
+ KERNEL /netboot/centos/7/vmlinuz
+ APPEND  initrd=/netboot/centos/7/initrd.img  method=http://10.177.75.12/pxe/centos/7/repo/  ks=http://10.177.75.12/pxe/centos/7
+/ks/<%= @host_to_add %>.cfg
+

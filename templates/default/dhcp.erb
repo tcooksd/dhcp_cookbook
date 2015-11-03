@@ -1,0 +1,37 @@
+ # DHCP Server Configuration file.
+ #   see /usr/share/doc/dhcp*/dhcpd.conf.example
+ #   see dhcpd.conf(5) man page
+ #
+ # option definitions common to all supported networks...
+ ddns-update-style interim;
+ ignore client-updates;
+
+
+ authoritative;
+ allow booting;
+ allow bootp;
+ allow unknown-clients;
+ # A slightly different configuration for an internal subnet.
+
+ subnet 10.177.75.0 netmask 255.255.255.0 {
+   range 10.177.75.50 10.177.75.250;
+   option domain-name-servers 10.176.10.176;
+   option domain-name "server1.example.com";
+   option routers 10.177.75.1;
+   #option broadcast-address 10.5.5.31; #not important
+   default-lease-time 600;
+   max-lease-time 7200;
+
+   <% @hosts_to_add.each do |host| %>
+   host <%= host['hostname']  %> { 
+     next-server 10.177.75.12;
+     hardware ethernet <%= host['mac'] %>;
+     fixed-address <%= host['ip_address'] %>;
+   }
+
+   <% end %>  
+
+   # PXE SERVER IP
+   next-server 10.177.75.12; #  DHCP server ip
+   filename "pxelinux.0";
+}
