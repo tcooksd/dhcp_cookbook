@@ -30,7 +30,7 @@ function check_existing_host {
 }
 
 function check_ip { 
-  if [[ $1 =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+  if [[ $1 =~ ^10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     echo "thanks" 1> /dev/null 
   else 
     echo ""
@@ -45,7 +45,7 @@ function check_existing_mac {
   echo $1 | grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' 1> /dev/null 
   if [ $? -ne "0" ]; then 
     echo ""
-    echo "please provide a valid mac address, $1 is not going to work"
+    echo "please provide a valid mac address, $1 is not going to work."
     echo ""
     exit
   fi
@@ -57,7 +57,7 @@ function check_existing_mac {
 }
 
 function check_existing_pxe_ip { 
-  check_ip $1  "please provide a properly formatted ip address for your pxe ip" 
+  check_ip $1  "Please provide a properly formatted ip address for your pxe ip. NOTE: ip must start with 10." 
   cat $attribute_dir | grep $1 1> /dev/null 
   if [ $? -eq "0" ] ; 
     then 
@@ -66,7 +66,7 @@ function check_existing_pxe_ip {
 }
 
 function check_existing_static_ip { 
-  check_ip $1  "Please provide a properly formatted ip address for your static ip" 
+  check_ip $1  "Please provide a properly formatted ip address for your static ip. NOTE: ip must start with a 10." 
   cat $attribute_dir | grep $1 1> /dev/null 
   if [ $? -eq "0" ] ; 
     then 
