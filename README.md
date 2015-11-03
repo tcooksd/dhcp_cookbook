@@ -40,10 +40,10 @@ Usage
 
 ```json
 default['server']['hosts'] = [
-  { 'hostname' =>  'kvm02', 
-    'mac' => '00:25:B5:02:B0:0A', 
-    'ip_address' => '10.177.75.63',
-    'perm_address' => '10.177.3.61'
+  { 'hostname' =>  'host_name', 
+    'mac' => 'xx:xx:xx:xx:xx:xx', 
+    'ip_address' => '10.x.x.x',
+    'perm_address' => '10.x.x.x'
   } 
 ```
 
