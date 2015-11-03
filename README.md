@@ -36,23 +36,17 @@ Attributes
 Usage
 -----
 #### dhcp_mod::default
-TODO: Write usage instructions for each cookbook.
 
-e.g.
-Just include `dhcp_mod` in your node's `run_list`:
 
 ```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[dhcp_mod]"
-  ]
-}
+default['server']['hosts'] = [
+  { 'hostname' =>  'kvm02', 
+    'mac' => '00:25:B5:02:B0:0A', 
+    'ip_address' => '10.177.75.63',
+    'perm_address' => '10.177.3.61'
+  } 
 ```
 
-Contributing
-------------
-TODO: (optional) If this is a public cookbook, detail the process for contributing. If this is a private cookbook, remove this section.
 
 -------------------
 Authors: 
