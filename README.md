@@ -11,8 +11,11 @@ D. adds host to /tftpboot/pxelinux.cfg/hostname adding the ability to pre sym li
 Requirements
 ------------
 dhcpd 
+
 pxe 
+
 tftpboot 
+
 apache 
 
 Attributes
